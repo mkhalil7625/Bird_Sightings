@@ -1,0 +1,58 @@
+<div class="bird-info">
+    <h1>{{bird.name}}</h1>
+    <h2>Bird Information</h2>
+
+    <h3>Description</h3>
+    <p>{{bird.description}}</p>
+
+    <h3>Average Eggs Laid</h3>
+    <p>{{bird.averageEggs}}</p>
+
+    <h3>Conservation Status</h3>
+    {{#if bird.endangered}}
+        <p>{{bird.name}} is endangered</p>
+    {{else}}
+        <p>{{bird.name}} is not endangered</p>
+    {{/if}}
+    <h3>Nest Information</h3>
+    <p>Location: {{bird.nest.location}}</p>
+    <p>Materials: {{bird.nest.materials}}</p>
+</div>
+<div class="sighting-dates">
+    <h2>Bird Sightings</h2>
+    <div class="new-sighting-form">
+        <h3>Report a new sighting</h3>
+        <form method="POST" action="/addSighting">
+            Sighting Date: <input type="datetime-local" name="date" required>
+            <!--create _ids-->
+            <input type="hidden"name="_id" value="{{bird.id}}">
+            <button type="submit">Submit Sighting</button>
+
+        </form>
+        <!--create flash error messages-->
+        <div class="flash-errors">
+            {{#if messages}}
+                <p class="error-message">{{messages.error}}</p>
+            {{/if}}
+        </div>
+    </div>
+    <div class="sighting-list">
+        <!--add number of sigtings using length helper-->
+        <p>Number of sightings: {{length bird.datesSeen}}</p>
+        <h3>All sighting dates, local Minnesota time</h3>
+        {{#each bird.datesSeen}}
+            <!--display date with the new format using the helper-->
+            <p>{{formatDate this}}</p>
+        {{else}}
+            <p>No sighting for {{bird.name}}</p>
+        {{/each}}
+    </div>
+</div>
+<!--delete form-->
+<form class="delete-done-form"action="/delete" method="POST">
+    <input class="delete-button" type="submit"name="delete"value="Delete">
+    <!--dont forget the _id -->
+    <input type="hidden" name="_id" value="{{bird._id}}">
+</form>
+<!--add link to confirmDelete.js-->
+<script src="/javascripts/confirmDelete.js"></script>
